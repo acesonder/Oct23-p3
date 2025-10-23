@@ -317,7 +317,7 @@ curl http://localhost:3000/api/admin/config \
 CLIENT_TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"client1","password":"client123"}' | \
-  grep -o '"token":"[^"]*' | cut -d'"' -f4)
+  jq -r '.token')
 
 # Submit shelter need
 NEED_RESPONSE=$(curl -s -X POST http://localhost:3000/api/client/needs \
@@ -329,7 +329,7 @@ NEED_RESPONSE=$(curl -s -X POST http://localhost:3000/api/client/needs \
     "urgency": "high"
   }')
 
-NEED_ID=$(echo $NEED_RESPONSE | grep -o '"id":"[^"]*' | cut -d'"' -f4)
+NEED_ID=$(echo $NEED_RESPONSE | jq -r '.need.id')
 echo "Need ID: $NEED_ID"
 ```
 
@@ -339,7 +339,7 @@ echo "Need ID: $NEED_ID"
 OUTREACH_TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"outreach1","password":"outreach123"}' | \
-  grep -o '"token":"[^"]*' | cut -d'"' -f4)
+  jq -r '.token')
 
 # Assign to self
 curl -X POST http://localhost:3000/api/outreach/needs/$NEED_ID/assign \
@@ -348,7 +348,12 @@ curl -X POST http://localhost:3000/api/outreach/needs/$NEED_ID/assign \
 # Get provider ID
 PROVIDER_ID=$(curl -s http://localhost:3000/api/outreach/providers \
   -H "Authorization: Bearer $OUTREACH_TOKEN" | \
-  grep -o '"id":"[^"]*' | head -1 | cut -d'"' -f4)
+  jq -r '.providers[0].id // empty')
+
+if [ -z "$PROVIDER_ID" ]; then
+  echo "Error: No providers found"
+  exit 1
+fi
 
 # Forward to provider
 curl -X POST http://localhost:3000/api/outreach/needs/$NEED_ID/forward \
@@ -366,7 +371,7 @@ curl -X POST http://localhost:3000/api/outreach/needs/$NEED_ID/forward \
 PROVIDER_TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"provider1","password":"provider123"}' | \
-  grep -o '"token":"[^"]*' | cut -d'"' -f4)
+  jq -r '.token')
 
 # Accept request
 curl -X POST http://localhost:3000/api/provider/requests/$NEED_ID/accept \
@@ -387,11 +392,11 @@ curl -X POST http://localhost:3000/api/provider/requests/$NEED_ID/complete \
 ADMIN_TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"admin","password":"admin123"}' | \
-  grep -o '"token":"[^"]*' | cut -d'"' -f4)
+  jq -r '.token')
 
 # View analytics
 curl http://localhost:3000/api/admin/reports/analytics \
-  -H "Authorization: Bearer $ADMIN_TOKEN" | python3 -m json.tool
+  -H "Authorization: Bearer $ADMIN_TOKEN" | jq
 ```
 
 ## Using Postman
@@ -443,10 +448,10 @@ Import these as a Postman collection:
 ## Tips
 
 1. **Save tokens**: After login, save the token in an environment variable
-2. **Use jq for formatting**: Pipe responses through `jq` for better formatting
+2. **Use jq for JSON**: Install jq (`apt-get install jq` or `brew install jq`) for robust JSON parsing
 3. **Check status**: Use `-i` flag with curl to see HTTP status codes
 4. **Verbose output**: Use `-v` flag for debugging
-5. **Pretty print JSON**: Use `python3 -m json.tool` to format JSON responses
+5. **Pretty print JSON**: Use `jq` to format JSON responses (or `python3 -m json.tool` as fallback)
 
 ## Next Steps
 
