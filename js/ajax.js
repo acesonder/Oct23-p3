@@ -8,13 +8,13 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             
             if (confirm('Are you sure you want to logout?')) {
-                fetch('/api/logout.php', {
+                fetch('api/logout.php', {
                     method: 'POST'
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = '/index.php';
+                        window.location.href = 'index.php';
                     } else {
                         alert('Logout failed. Please try again.');
                     }

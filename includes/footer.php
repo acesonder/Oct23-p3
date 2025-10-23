@@ -5,7 +5,7 @@
         </div>
     </footer>
     
-    <script src="/js/theme.js"></script>
-    <script src="/js/ajax.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/ajax.js"></script>
 </body>
 </html>
