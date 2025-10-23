@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Portal Outreach System - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .portals {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .portal-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .portal-card.client {
+            border-top: 4px solid #4CAF50;
+        }
+
+        .portal-card.outreach {
+            border-top: 4px solid #2196F3;
+        }
+
+        .portal-card.provider {
+            border-top: 4px solid #FF9800;
+        }
+
+        .portal-card.admin {
+            border-top: 4px solid #f44336;
+        }
+
+        .portal-card h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .portal-card .description {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .credentials {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .credentials div {
+            margin: 5px 0;
+        }
+
+        .credentials strong {
+            color: #333;
+        }
+
+        .test-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .test-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .test-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status.success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status.error {
+            background: #f44336;
+            color: white;
+        }
+
+        .status.pending {
+            background: #FF9800;
+            color: white;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .info-box strong {
+            color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Multi-Portal Outreach System</h1>
+            <p>Comprehensive platform for homeless, addiction recovery, and mental health services</p>
+        </div>
+
+        <div class="portals">
+            <div class="portal-card client">
+                <h2>👤 Client Portal</h2>
+                <div class="description">
+                    For homeless individuals, addiction recovery clients, and mental health users to communicate their needs and access services.
+                </div>
+                <div class="credentials">
+                    <div><strong>Username:</strong> client1</div>
+                    <div><strong>Password:</strong> client123</div>
+                </div>
+                <ul class="feature-list">
+                    <li>Submit need requests</li>
+                    <li>Track request status</li>
+                    <li>Browse services</li>
+                    <li>Message staff</li>
+                    <li>Schedule appointments</li>
+                </ul>
+            </div>
+
+            <div class="portal-card outreach">
+                <h2>🤝 Outreach Staff Portal</h2>
+                <div class="description">
+                    For outreach workers to manage client needs, coordinate services, and track outcomes.
+                </div>
+                <div class="credentials">
+                    <div><strong>Username:</strong> outreach1</div>
+                    <div><strong>Password:</strong> outreach123</div>
+                </div>
+                <ul class="feature-list">
+                    <li>View all client needs</li>
+                    <li>Assign and manage cases</li>
+                    <li>Forward to providers</li>
+                    <li>Generate reports</li>
+                    <li>Client management</li>
+                </ul>
+            </div>
+
+            <div class="portal-card provider">
+                <h2>🏢 Service Provider Portal</h2>
+                <div class="description">
+                    For service organizations to offer services, respond to requests, and track outcomes.
+                </div>
+                <div class="credentials">
+                    <div><strong>Username:</strong> provider1</div>
+                    <div><strong>Password:</strong> provider123</div>
+                </div>
+                <ul class="feature-list">
+                    <li>List services offered</li>
+                    <li>Accept/decline requests</li>
+                    <li>Track capacity</li>
+                    <li>Service metrics</li>
+                    <li>Client communication</li>
+                </ul>
+            </div>
+
+            <div class="portal-card admin">
+                <h2>⚙️ Admin Portal</h2>
+                <div class="description">
+                    For system administrators to manage users, configure portals, and monitor system health.
+                </div>
+                <div class="credentials">
+                    <div><strong>Username:</strong> admin</div>
+                    <div><strong>Password:</strong> admin123</div>
+                </div>
+                <ul class="feature-list">
+                    <li>User management</li>
+                    <li>System analytics</li>
+                    <li>Portal configuration</li>
+                    <li>Data export</li>
+                    <li>Health monitoring</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🧪 API Test Center</h2>
+            
+            <div class="info-box">
+                <strong>Note:</strong> Make sure the API server is running on <code>http://localhost:3000</code>. 
+                Run <code>npm start</code> from the project directory.
+            </div>
+
+            <div class="test-controls">
+                <button onclick="testLogin()">Test Login</button>
+                <button onclick="testSubmitNeed()">Submit Need (Client)</button>
+                <button onclick="testViewNeeds()">View Needs (Outreach)</button>
+                <button onclick="testAnalytics()">System Analytics (Admin)</button>
+                <button onclick="clearOutput()">Clear Output</button>
+            </div>
+
+            <div class="output" id="output">
+Click a button above to test the API...
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>📚 Documentation</h2>
+            <p style="margin-bottom: 15px;">
+                This is a demonstration page for the Multi-Portal Outreach System. The actual system is a RESTful API 
+                that can be integrated with any frontend framework.
+            </p>
+            <ul class="feature-list">
+                <li><strong>README.md</strong> - Complete documentation and API reference</li>
+                <li><strong>FUTURE_ADDONS.md</strong> - Extensive roadmap with 200+ enhancement ideas</li>
+                <li><strong>API_TESTING_GUIDE.md</strong> - Detailed API testing examples with cURL</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        let tokens = {};
+
+        function log(message, status = 'info') {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            const statusBadge = status !== 'info' ? `<span class="status ${status}">${status.toUpperCase()}</span>` : '';
+            output.innerHTML += `\n[${timestamp}] ${message} ${statusBadge}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearOutput() {
+            document.getElementById('output').innerHTML = 'Output cleared.\n';
+        }
+
+        async function apiCall(method, endpoint, data = null, token = null) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            };
+
+            if (token) {
+                options.headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            if (data) {
+                options.body = JSON.stringify(data);
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, options);
+                const result = await response.json();
+                return { success: response.ok, data: result, status: response.status };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function testLogin() {
+            log('Testing login as client...');
+            
+            const result = await apiCall('POST', '/api/auth/login', {
+                username: 'client1',
+                password: 'client123'
+            });
+
+            if (result.success) {
+                tokens.client = result.data.token;
+                log('✓ Login successful!', 'success');
+                log(`User: ${result.data.user.username} (${result.data.user.role})`);
+                log(`Token saved for future requests`);
+            } else {
+                log(`✗ Login failed: ${result.data.error || result.error}`, 'error');
+            }
+        }
+
+        async function testSubmitNeed() {
+            if (!tokens.client) {
+                log('Please login first!', 'error');
+                return;
+            }
+
+            log('Submitting need request as client...');
+
+            const result = await apiCall('POST', '/api/client/needs', {
+                category: 'shelter',
+                description: 'Need emergency shelter due to cold weather',
+                urgency: 'high',
+                location: 'Downtown area'
+            }, tokens.client);
+
+            if (result.success) {
+                log('✓ Need submitted successfully!', 'success');
+                log(JSON.stringify(result.data, null, 2));
+            } else {
+                log(`✗ Failed to submit need: ${result.data.error || result.error}`, 'error');
+            }
+        }
+
+        async function testViewNeeds() {
+            log('Logging in as outreach staff...');
+            
+            const loginResult = await apiCall('POST', '/api/auth/login', {
+                username: 'outreach1',
+                password: 'outreach123'
+            });
+
+            if (!loginResult.success) {
+                log(`✗ Login failed: ${loginResult.data.error || loginResult.error}`, 'error');
+                return;
+            }
+
+            tokens.outreach = loginResult.data.token;
+            log('✓ Login successful!', 'success');
+            log('Fetching all needs...');
+
+            const result = await apiCall('GET', '/api/outreach/needs', null, tokens.outreach);
+
+            if (result.success) {
+                log(`✓ Found ${result.data.needs.length} need(s)`, 'success');
+                log(JSON.stringify(result.data, null, 2));
+            } else {
+                log(`✗ Failed to fetch needs: ${result.data.error || result.error}`, 'error');
+            }
+        }
+
+        async function testAnalytics() {
+            log('Logging in as admin...');
+            
+            const loginResult = await apiCall('POST', '/api/auth/login', {
+                username: 'admin',
+                password: 'admin123'
+            });
+
+            if (!loginResult.success) {
+                log(`✗ Login failed: ${loginResult.data.error || loginResult.error}`, 'error');
+                return;
+            }
+
+            tokens.admin = loginResult.data.token;
+            log('✓ Login successful!', 'success');
+            log('Fetching system analytics...');
+
+            const result = await apiCall('GET', '/api/admin/reports/analytics', null, tokens.admin);
+
+            if (result.success) {
+                log('✓ Analytics retrieved successfully!', 'success');
+                log(JSON.stringify(result.data, null, 2));
+            } else {
+                log(`✗ Failed to fetch analytics: ${result.data.error || result.error}`, 'error');
+            }
+        }
+
+        // Test API connection on load
+        window.addEventListener('load', async () => {
+            log('Checking API connection...');
+            const result = await apiCall('GET', '/health');
+            if (result.success) {
+                log('✓ API server is running!', 'success');
+                log(`Server Status: ${result.data.status}`);
+            } else {
+                log('✗ Cannot connect to API server. Make sure it is running on http://localhost:3000', 'error');
+            }
+        });
+    </script>
+</body>
+</html>
